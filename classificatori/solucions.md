@@ -109,7 +109,7 @@ Per aquest i altres problemes gràfics, recordeu que les imatges de la llibreria
 
 ## [Problema Q1. Caramels](https://jutge.org/problems/P22580_ca) <a name="Q1"/>
 
-Cal saber que hi ha $\binom{n}{k}$ ("$n$ sobre $k$") maneres d'escollir $k$ objectes d'entre $n$. El nombre de maneres es pot calcular amb la fórmula $\binom{n}{k} = \frac{n!}{k!(n-k)!}$.
+Cal saber que hi ha $\binom{n}{k}$ (" $n$ sobre $k$ ") maneres d'escollir $k$ objectes d'entre $n$. El nombre de maneres es pot calcular amb la fórmula $\binom{n}{k} = \frac{n!}{k!(n-k)!}$.
 
 Les nenes poden rebre un caramel especial o dos. El nombre de maneres que una nena rebi un caramel especial és $\binom{6}{1} \cdot \binom{4}{2} = 6 \cdot 6 = 36$. El nombre de maneres que dues nenes reben un caramel especial és $\binom{6}{2} \cdot \binom{4}{1}  = 15 \cdot 4 = 60$. En total, hi ha 96 possibilitats.
 
@@ -366,5 +366,5 @@ La solució directa, que només obté puntuació parcial, calcula els 12! camins
 
 La solució esperada primer reparteix els vèrtexs en dos conjunts de (quasi) la mateixa mida, de totes les maneres possibles. Després, calcula tots els camins per força bruta en el graf original amb els vèrtexs d'un dels subconjunts, guardant els prefixos trobats i de quantes maneres s'han obtingut en un map. Després, es fa una altra força bruta en el graf invers amb l'altre subconjunt de vèrtexs. Per a cada sufix trobat, sumem al resultat total la quantitat de vegades que el mateix prefix ha aparegut en la força bruta anterior. Aquesta tècnica s'anomena <a href="https://usaco.guide/gold/meet-in-the-middle?lang=cpp">meet in the middle</a>.
 
-Si calculem què costa, tenim $\binom{12}{6} = 924$ maneres de repartir els vèrtexs en dues meitats. Cada meitat costa $6! = 720$ permutacions, que s'ha de multiplicar pel cost de guardar-la o buscar-la a un map. Això dóna $924*2*6!$ accessos a un map, nombre
+Si calculem què costa, tenim $\binom{12}{6} = 924$ maneres de repartir els vèrtexs en dues meitats. Cada meitat costa $6! = 720$ permutacions, que s'ha de multiplicar pel cost de guardar-la o buscar-la a un map. Això dóna $924\cdot 2 \cdot 6!$ accessos a un map, nombre
 més petit que un milió i mig.
