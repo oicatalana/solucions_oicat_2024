@@ -20,20 +20,61 @@
 
 ## [Problema C1. Localitat més llunyana](https://jutge.org/problems/P37104_ca) <a name="C1"></a>
 
+En aquest problema es donaven dues ciutats, amb la seva distància en milles o quilòmetres, i s'havia de dir quina de les dues era la més llunyana (suposant que una milla equival exactament a 1609 metres). Conceptualment, aquest problema era molt senzill, però alguns participants van tenir errors per manipular malament els nombres amb decimals. Per evitar-ho, la solució més senzilla consistia en passar totes les quantitats a metres. Així, les quantitats en quilòmetres s'havien de multiplicar per 1000 i les quantitats en milles s'havien de multiplicar per 1609, i no s'havien d'utilitzar nombres amb decimals en cap moment.  
 
 <details>
   <summary><b>Codi (C++)</b></summary>
 
 ```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
+int main() {
+  string nom1, nom2;
+  int dist1, dist2;
+  string unitat1, unitat2;
+  cin >> nom1 >> dist1 >> unitat1;
+  cin >> nom2 >> dist2 >> unitat2;
+  
+  if(unitat1 == "milles") 
+    dist1 *= 1609;
+  else 
+    dist1 *= 1000;
+
+  if(unitat2 == "milles") 
+    dist2 *= 1609;
+  else 
+    dist2 *= 1000;
+
+  if(dist1 > dist2) 
+    cout << nom1 << endl;
+  else 
+    cout << nom2 << endl;
+}
 ```
 </details>
 
 <details>
   <summary><b>Codi (Python 3)</b></summary>
 
-```cpp
+```py
+from easyinput import read
 
+def Convert(a):
+  if a[2] == "milles":
+    a[1] *= 1609
+  else:
+    a[1] *= 1000
+
+
+a = read(str, int, str)
+b = read(str, int, str)
+Convert(a)
+Convert(b)
+if a[1] > b[1]:
+  print(a[0])
+else:
+  print(b[0])
 ```
 </details>
 
@@ -48,13 +89,21 @@
 ## [Problema G2. Vestits](https://jutge.org/problems/P15490_ca) <a name="G2"/>
 
 ## [Problema Q2. Superprimers](https://jutge.org/problems/P99345_ca) <a name="Q2"/>
+
 ## [Problema C4. Més o menys?](https://jutge.org/problems/P17499_ca) <a name="C4"/>
+
 ## [Problema Q3. Pocs palíndroms](https://jutge.org/problems/P97623_ca) <a name="Q3"/>
+
 ## [Problema G3. Pinball](https://jutge.org/problems/P94446_ca) <a name="G3"/>
+
 ## [Problema C5. Quadradets](https://jutge.org/problems/P76718_ca) <a name="C5"/>
+
 ## [Problema Q4. Suma de cubs (2)](https://jutge.org/problems/P52098_ca) <a name="Q4"/>
+
 ## [Problema C6. Laberint](https://jutge.org/problems/P34055_ca) <a name="C6"/>
+
 ## [Problema C7. Collaret de perles (2)](https://jutge.org/problems/P89236_ca) <a name="C7"/>
+
 ## [Problema C8. Arbres Red-Black](https://jutge.org/problems/P13747_ca) <a name="C8"/>
 
 
