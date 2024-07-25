@@ -182,7 +182,7 @@ for n in range(100):
 
 En aquest problema s'havia de crear una imatge representant una fusta de la qual pengen una sèrie de llonganisses de les mides donades. La única dificultat de la solució era implementar les instruccions donades sense equivocar-se.
 
-Recordeu que podeu trobar una xuleta pels problemes gràfics a [](https://lliçons.jutge.org/python/grafics/pil.html), amb exemples d'ús de les funcions més habituals.
+Recordeu que podeu trobar una xuleta pels problemes gràfics a [https://lliçons.jutge.org/python/grafics/pil.html](https://lliçons.jutge.org/python/grafics/pil.html), amb exemples d'ús de les funcions més habituals.
 
 <details>
   <summary><b>Codi (Python 3)</b></summary>
