@@ -84,13 +84,13 @@ En aquest problema, donades les longituds de 4 segments, ens demanaven si podíe
 
 En el cas d'un triangle, la mateixa condició continua sent vàlida, i es coneix amb el nom de [desigualtat triangular](https://ca.wikipedia.org/wiki/Desigualtat_triangular). Així doncs, podrem construir un triangle amb costats $a \leq b \leq c$ sempre que es compleixi que $c < a + b$. 
 <details>
-  <summary>Demostració del cas del triangle (no del tot rigurosa)</summary>
+  <summary><b>Demostració del cas del triangle (no del tot rigurosa)</b></summary>
 Per veure-ho, observem que si $c \geq a + b$, amb els segments de longituds $a$ i $b$ no podem arribar a "tancar" el de longitud $c$ (en el cas $c = a + b$ sí que podríem, però la figura resultant tindria àrea zero, i no considerem que sigui un triangle). En canvi, si $c < a + b$, col·loquem el segment $c$ horitzontal amb els segments $a$ i $b$ verticals un a cada extrem, i anem rotant els segments $a$ i $b$ de manera que la part superior dels dos segments estigui a la mateixa altura. No és difícil convèncer-se que la condició $c < a + b$ implica que els extrems lliures dels dos segments s'acabaran trobant, tancant el triangle.
 </details>
 
 Un cop ho hem resolt pel triangle, podem utilitzar aquesta mateixa idea pel cas del quadrilàter:
 <details>
-  <summary>Demostració del cas del quadrilàter (no del tot rigurosa)</summary>
+  <summary><b>Demostració del cas del quadrilàter (no del tot rigurosa)</b></summary>
   Suposem que tenim quatre segments amb longituds $a \leq b \leq c \leq d$. Si $d \geq a + b + c$, igual que en el cas del triangle és fàcil veure que no es pot aconseguir un quadrilàter d'àrea no zero. Suposem doncs que $d < a + b + c$. Si $a = b = c = d$, podem construir un quadrat. Així doncs, podem assumir que no tots els segments són igual de llargs. Això implica que podem ajuntar els dos segments més petits i construir un triangle amb costats de longitud $d$, $c$ i $a + b$ (en efecte, es continua complint que $d < c + a + b$, i també que $a + b < c + d$, ja que $a \leq c$ i $b \leq d$, i la igualtat només es podria donar si els quatre costats fossin iguals). Un cop construït el triangle amb un costat de longitud $a + b$, podem ajuntar lleugerament els dos extrems del costat $a + b$, i subdividir-lo en dos costats de longitud $a$ i $b$, que ja no seran paral·lels. 
 
   Òbviament, aquesta no és una demostració totalment rigurosa, però esperem que serveixi per donar una idea intuïtiva de perquè la observació és certa.
