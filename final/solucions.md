@@ -141,7 +141,60 @@ for _ in range(n):
 
 ## [Problema Q1. Suma de cubs (1)](https://jutge.org/problems/P43901_ca) <a name="Q1"/>
 
+En aquest problema hem de trobar el nombre més petit que sigui la suma de 8 cubs consecutius i que sigui divisible per 2024 (sense ser 2024 mateix). Per resoldre-ho, calculem totes les possibles sumes de cubs consecutius i comprovem per cadascuna si és divisible per 2024. 
+
+<details>
+  <summary><b>Codi (C++)</b></summary>
+  
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+  for(int n = 1; n <= 100; ++n) {
+    int suma_cubs = 0;
+    for(int i = 0; i < 8; ++i) {
+      suma_cubs += (n+i) * (n+i) * (n+i);
+    }
+    if(suma_cubs % 2024 == 0) {
+      cout << suma_cubs << endl;
+    }
+  }
+}
+```
+</details>
+
+<details>
+  <summary><b>Codi (Python 3)</b></summary>
+
+```py
+for n in range(100):
+  suma_cubs = 0
+  for i in range(8):
+    suma_cubs += (n + i)**3
+  if suma_cubs % 2024 == 0:
+    print(suma_cubs)
+```
+</details>
+
+
 ## [Problema G1. Llonganisses](https://jutge.org/problems/P55377_ca) <a name="G1"/>
+
+<details>
+  <summary><b>Codi (C++)</b></summary>
+  
+```cpp
+
+```
+</details>
+
+<details>
+  <summary><b>Codi (Python 3)</b></summary>
+
+```py
+
+```
+</details>
 
 ## [Problema C3. Collaret de perles (1)](https://jutge.org/problems/P38607_ca) <a name="C3"/>
 
