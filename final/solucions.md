@@ -421,9 +421,9 @@ int main() {
 
 ## [Problema Q3. Pocs palíndroms](https://jutge.org/problems/P97623_ca) <a name="Q3"/>
 
-En aquest problema ens demanen trobar la paraula de longitud 20 només amb les lletres 'a' i 'b' que té el mínim nombre de subparaules palindròmiques.
+En aquest problema ens demanen trobar la paraula de longitud 20 amb les lletres 'a' i 'b' que té el mínim nombre de subparaules palindròmiques.
 
-Donat que el nombre de paraules de longitud 20 que podem fer amb 2 lletres és $2^20 \cong 10^6$, podem iterar per totes les possibilitats i per cadascuna comprovar quantes subparaules palindròmiques té. Depèn de com ho implementem, el programa pot trigar una mica, però hauria d'acabar en uns pocs segons (que seria massa lent per enviar-lo al Jutge, però que no és un problema si només l'hem d'executar localment).
+Donat que el nombre de paraules de longitud 20 que podem fer amb 2 lletres és $2^{20} \cong 10^6$, podem iterar per totes les possibilitats i per cadascuna comprovar quantes subparaules palindròmiques té. Depèn de com ho implementem, el programa pot trigar una mica, però hauria d'acabar en uns pocs segons (que seria massa lent per enviar-lo al Jutge, però que no és un problema si només l'hem d'executar localment).
 
 Per iterar per totes les paraules de longitud 20, podem utilitzar el següent truc. Observeu que hi ha una bijecció entre les paraules de longitud 20 amb les lletres 'a' i 'b' i els nombres de 20 dígits escrits en binari (per exemple, podem representar les 'a' com un '0' i les 'b' com un '1'). Així doncs, si iterem pels nombres des de $0$ fins a $2^20 - 1$ (que són 20 '1's seguits en binari), i considerem que els '0' són 'a' i els '1' són 'b', estarem iterant per totes les paraules possibles de longitud 20. A més, estarem iterant en ordre lexicogràfic, cosa que ens ajuda perquè el problema ens demana donar la paraula lexicogràficament més petita (d'entre les que tenen el mateix nombre de subparaules).   
 
