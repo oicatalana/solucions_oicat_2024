@@ -630,12 +630,12 @@ $$n^3 + (n+1)^3 + (n+2)^3 + (n+3)^3 + (n+4)^3 + (n+5)^3 + (n+6)^3 + (n+7)^3 \equ
 Si desenvolupéssim aquesta expressió, obtindríem un polinomi en la variable $n$ (on el grau màxim és 3, de fet). Això és molt útil, ja que per qualsevol $k \geq 0$ tenim que
 $$(n + 2024)^k = \sum_{i = 0}^k \binom{k}{i} n^i \cdot 2024^{k-i} \equiv n^k \mod 2024$$
 
-Per tant, si sumem 2024 a $n$, el mòdul de l'expressió anterior no canvia, així que si l'expressió anterior és múltiple de 2024 per una certa $n$, també ho serà per $n + 2024$, $n + 2\cdot 2024$, $n + 3 \cdot 2024$, $\dots$.
+Per tant, si sumem 2024 a $n$, el mòdul de l'expressió anterior no canvia, així que si l'expressió anterior és múltiple de 2024 per una certa $n$, també ho serà per $n + 2024$, $n + 2\cdot 2024$, $n + 3 \cdot 2024$, i així successivament.
 
-Així doncs, només hem de calcular quantes sumes de cubs són múltiples de 2024 per $n$ entre $1$ i $2024$, i multiplicar el resultat per $2024^{2024}/2024$. 
+Així doncs, només hem de calcular quantes sumes de cubs són múltiples de 2024 per les $n$ entre $1$ i $2024$, i multiplicar el resultat per $2024^{2024}/2024$. 
 
 <details>
-  <summary><b>Codi (C++)</b></summary>
+  <summary><b>Codi (Python 3)</b></summary>
 
 ```py
 valids = 0
@@ -658,6 +658,200 @@ print("Suma dels digits: ", suma_digits)
 </details>
 
 ## [Problema C6. Laberint](https://jutge.org/problems/P34055_ca) <a name="C6"/>
+
+En aquest problema hem de dir quin és el mínim nombre d'obstacles que hem d'enderrocar per poder sortir d'un laberint (donat en forma de graella, amb certes caselles bloquejades).
+
+El problema té un subcas que compta el 60% dels punts i que consisteix en casos on ens garanteixen que la resposta és sempre 0 o 1. Per resoldre'l, fem un DFS (o BFS) des de la posició inicial i mirem si arribem a sortir de la graella. Si és així, la resposta és 0, mentre que si no podem sortir, haurem d'enderrocar mínim un obstacle, i ens garanteixen que llavors la resposta és 1.
+
+Tingueu en compte que el programa es pot passar del límit de temps si continueu la cerca un cop heu trobat una sortida del laberint, tot i que això no canviaria la complexitat assimptòtica (que és $\mathcal{O}(n + m)$, on $n$ i $m$ són el nombre de files i columnes de la graella).
+
+<details>
+  <summary><b>Solució parcial (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+using ii = pair<int,int>;
+using iii = pair<int,ii>;
+
+int const INF = 1e9;
+vector<int> dr = {1, 0, -1, 0};
+vector<int> dc = {0, 1, 0, -1};
+
+int main() {
+  int n, m;
+  while(cin >> n >> m) {
+    vector<string> v(n);
+    for(string& s : v) 
+      cin >> s;
+    ii inicial;
+    for(int r = 0; r < n; ++r) {
+      for(int c = 0; c < m; ++c) {
+        if(v[r][c] == 'I') {
+          inicial = {r, c};
+        }
+      }
+    }
+    vector<vector<bool>> vist(n, vector<bool>(m, false));
+    vist[inicial.first][inicial.second] = true;
+    bool sortit = false;
+    queue<ii> q;
+    q.push(inicial);
+    while(not q.empty()) {
+      ii x = q.front();
+      q.pop();
+      int r = x.first;
+      int c = x.second;
+      if(r == 0 or c == 0 or r == n-1 or c == m-1) {
+        sortit = true;
+        break;
+      }
+      for(int k = 0; k < 4; ++k) {
+        int rnou = r + dr[k];
+        int cnou = c + dc[k];
+        if(v[rnou][cnou] != 'X' and not vist[rnou][cnou]) {
+          vist[rnou][cnou] = true;
+          q.push({rnou, cnou});
+        }
+      }
+    }
+    cout << (sortit ? 0 : 1) << endl;
+  }
+}
+```
+</details>
+
+Per resoldre els casos on hem d'enderrocar un nombre més gran d'obstacles, hem de transformar el problema en un problema de grafs amb pesos ('weighted graphs' en anglès). Per fer-ho, ens muntem un graf dirigit on cada casella és un vèrtex, i hi ha un arc de la casella $v$ a la casella $w$ si aquestes caselles comparteixen un costat en la graella. Per tal de representar les caselles bloquejades, li assignem un pes de $1$ als arcs que arriben a una casella bloquejada, i $0$ als arcs que arriben a una casella lliure.
+
+Aleshores, el nombre de caselles bloquejades per les quals passem en un camí serà la suma dels costos dels arcs que el formen. Per tant, el problema es redueix a trobar el camí de mínim cost que surti de la graella.
+
+La manera estàndard de trobar camins de mínim cost és amb l'[algorisme de Dijkstra](https://cp-algorithms.com/graph/dijkstra.html), que et troba el mínim cost per arribar des d'un vèrtex fix a tota la resta de vèrtexos del graf. Aquest algorisme té una complexitat assimptòtica de $\mathcal{O}((n+m) \log n)$ ([aquí](https://cp-algorithms.com/graph/dijkstra_sparse.html) podeu trobar una implementació més eficient). Per aquest problema, aquesta solució ja és prou bona, i hauria d'entrar per temps.
+
+<details>
+  <summary><b>Solució amb Dijkstra (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+using ii = pair<int,int>;
+using iii = pair<int,ii>;
+
+int const INF = 1e9;
+vector<int> dr = {1, 0, -1, 0};
+vector<int> dc = {0, 1, 0, -1};
+
+int main() {
+  int n, m;
+  while(cin >> n >> m) {
+    vector<string> v(n);
+    for(string& s : v) 
+      cin >> s;
+    ii inicial;
+    for(int r = 0; r < n; ++r) {
+      for(int c = 0; c < m; ++c) {
+        if(v[r][c] == 'I') {
+          inicial = {r, c};
+        }
+      }
+    }
+    vector<vector<int>> dist(n, vector<int>(m, INF));
+    dist[inicial.first][inicial.second] = 0;
+    priority_queue<iii, vector<iii>, greater<iii>> pq;
+    pq.push({0, inicial});
+    int ans = -1;
+    while(not pq.empty()) {
+      iii x = pq.top();
+      pq.pop();
+      int d = x.first;
+      int r = x.second.first;
+      int c = x.second.second;
+      if(r == 0 or c == 0 or r == n-1 or c == m-1) {
+        ans = d;
+        break;
+      }
+      for(int k = 0; k < 4; ++k) {
+        int rnou = r + dr[k];
+        int cnou = c + dc[k];
+        int increment = int(v[rnou][cnou] == 'X');
+        if(dist[rnou][cnou] > dist[r][c] + increment) {
+          dist[rnou][cnou] = dist[r][c] + increment;
+          pq.push({dist[rnou][cnou], {rnou, cnou}});
+        }
+      }
+    }
+    cout << ans << endl;
+  }
+}
+```
+</details>
+
+Si volem filar més prim, podem utilitzar el fet que els pesos dels arcs són sempre 0 o 1 per obtenir una solució més eficient. A l'algorisme de Dijkstra, el factor logarítmic apareix perquè hem d'anar insertant els vèrtexos a una cua de prioritat, mantenint sempre el vèrtex més proper com el primer de la cua. Si els pesos dels arcs només poden ser 0 o 1, tenim que les distàncies dels vèrtexs de la cua diferiran en com a molt 1, de manera que la llista ordenada de distàncies dels vèrtexos de la cua tindria la forma $(d,\dots, d, d+1, \dots, d+1)$ o bé $(d, \dots, d)$. En aquest cas, per mantenir la cua ordenada només ens fa falta poder insertar un vèrtex al principi (si té distància $d$) o al final (si té distància $d + 1$). Per tant, ho podem implementar amb una `deque` en cost lineal.
+
+Aquesta tècnica es coneix com a [0/1-BFS](https://cp-algorithms.com/graph/01_bfs.html).
+
+<details>
+  <summary><b>Solució amb 0/1-BFS (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+using ii = pair<int,int>;
+using iii = pair<int,ii>;
+
+int const INF = 1e9;
+vector<int> dr = {1, 0, -1, 0};
+vector<int> dc = {0, 1, 0, -1};
+
+int main() {
+  int n, m;
+  while(cin >> n >> m) {
+    vector<string> v(n);
+    for(string& s : v) 
+      cin >> s;
+    ii inicial;
+    for(int r = 0; r < n; ++r) {
+      for(int c = 0; c < m; ++c) {
+        if(v[r][c] == 'I') {
+          inicial = {r, c};
+        }
+      }
+    }
+    vector<vector<int>> dist(n, vector<int>(m, INF));
+    dist[inicial.first][inicial.second] = 0;
+    deque<iii> dq;
+    dq.push_back({0, inicial});
+    int ans = -1;
+    while(not dq.empty()) {
+      iii x = dq.front();
+      dq.pop_front();
+      int d = x.first;
+      int r = x.second.first;
+      int c = x.second.second;
+      if(r == 0 or c == 0 or r == n-1 or c == m-1) {
+        ans = d;
+        break;
+      }
+      for(int k = 0; k < 4; ++k) {
+        int rnou = r + dr[k];
+        int cnou = c + dc[k];
+        int increment = int(v[rnou][cnou] == 'X');
+        if(dist[rnou][cnou] > dist[r][c] + increment) {
+          dist[rnou][cnou] = dist[r][c] + increment;
+          if(dq.empty() or dq.front().first >= dist[rnou][cnou])
+            dq.push_front({dist[rnou][cnou], {rnou, cnou}});
+          else
+            dq.push_back({dist[rnou][cnou], {rnou, cnou}});
+        }
+      }
+    }
+    cout << ans << endl;
+  }
+}
+```
+</details>
 
 ## [Problema C7. Collaret de perles (2)](https://jutge.org/problems/P89236_ca) <a name="C7"/>
 
