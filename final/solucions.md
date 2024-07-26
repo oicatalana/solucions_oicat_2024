@@ -377,7 +377,7 @@ int main() {
 
 ## [Problema C4. Més o menys?](https://jutge.org/problems/P17499_ca) <a name="C4"/>
 
-En aquest problema, dues persones estan jugant a un joc d'endevinar un nombre d'$1$ a $n$. Per cada intent de la primera persona, la segona persona li diu si el nombre secret és més gran, més petit, o si l'ha endevinat exactament. Al final, ens demanen dir si la segona persona ha respost de manera coherent (és a dir, si existeix un nombre coherent amb totes les respostes), i en cas que n'hi hagi un de sol, dir quin és.
+En aquest problema, dues persones estan jugant a un joc d'endevinar un nombre d\'$1$ a $n$. Per cada intent de la primera persona, la segona persona li diu si el nombre secret és més gran, més petit, o si l'ha endevinat exactament. Al final, ens demanen dir si la segona persona ha respost de manera coherent (és a dir, si existeix un nombre coherent amb totes les respostes), i en cas que n'hi hagi un de sol, dir quin és.
 
 Observem que, si la primera persona diu el nombre $x$ i la segona persona respon 'més', això elimina tots els nombres des d'$1$ fins a $x$ com a possibles solucions. Analogament, si la segona persona respon 'menys', això elimina tots els nombres des de $x$ fins a $n$. Així doncs, ens podem guardar el nombre més petit i el nombre més gran que encara no s'han eliminat, i amb cada resposta 'més' fem `petit = max(petit, x+1)`, i amb cada resposta 'menys' fem `gran = min(gran, x-1)`. Al final, haurem de comprovar si `petit <= gran`.
 
