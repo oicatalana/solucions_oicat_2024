@@ -381,7 +381,7 @@ En aquest problema, dues persones estan jugant a un joc d'endevinar un nombre de
 
 Observem que, si la primera persona diu el nombre $x$ i la segona persona respon 'més', això elimina tots els nombres des de $1$ fins a $x$ com a possibles solucions. Analogament, si la segona persona respon 'menys', això elimina tots els nombres des de $x$ fins a $n$. Així doncs, ens podem guardar el nombre més petit i el nombre més gran que encara no s'han eliminat, i amb cada resposta 'més' fem `petit = max(petit, x+1)`, i amb cada resposta 'menys' fem `gran = min(gran, x-1)`. Al final, haurem de comprovar si `petit <= gran`.
 
-Per processar les respostes 'sí' (és a dir, quan el primer jugador ha endevinat el nombre), observem que respondre 'sí' a $x$ és equivalent a respondre 'més' a $x-1$ i 'menys' a $x+1$ a la vegada. Alternativament, podríem tenir una variable booleana que ens diu si hem respost que sí ja a algun nombre, i guardar-nos també la $x$ a la que hem respost que sí, per comprovar que les respostes següents siguin coherents.   
+Per processar les respostes 'sí' (és a dir, quan el primer jugador ha endevinat el nombre), observem que respondre 'sí' a $x$ és equivalent a respondre 'més' a $x-1$ i 'menys' a $x+1$. Alternativament, podríem tenir una variable booleana que ens diu si hem respost que sí ja a algun nombre, i guardar-nos també la $x$ a la que hem respost que sí, per comprovar que les respostes següents siguin coherents.   
 
 <details>
   <summary><b>Codi (C++)</b></summary>
@@ -420,6 +420,46 @@ int main() {
 </details>
 
 ## [Problema Q3. Pocs palíndroms](https://jutge.org/problems/P97623_ca) <a name="Q3"/>
+
+En aquest problema ens demanen trobar la paraula de longitud 20 només amb les lletres 'a' i 'b' que té el mínim nombre de subparaules palindròmiques.
+
+Donat que el nombre de paraules de longitud 20 que podem fer amb 2 lletres és $2^20 \cong 10^6$, podem iterar per totes les possibilitats i per cadascuna comprovar quantes subparaules palindròmiques té. Depèn de com ho implementem, el programa pot trigar una mica, però hauria d'acabar en uns pocs segons (que seria massa lent per enviar-lo al Jutge, però que no és un problema si només l'hem d'executar localment).
+
+Per iterar per totes les paraules de longitud 20, podem utilitzar el següent truc. Observeu que hi ha una bijecció entre les paraules de longitud 20 amb les lletres 'a' i 'b' i els nombres de 20 dígits escrits en binari (per exemple, podem representar les 'a' com un '0' i les 'b' com un '1'). Així doncs, si iterem pels nombres des de $0$ fins a $2^20 - 1$ (que són 20 '1's seguits en binari), i considerem que els '0' són 'a' i els '1' són 'b', estarem iterant per totes les paraules possibles de longitud 20. A més, estarem iterant en ordre lexicogràfic, cosa que ens ajuda perquè el problema ens demana donar la paraula lexicogràficament més petita (d'entre les que tenen el mateix nombre de subparaules).   
+
+<details>
+  <summary><b>Codi (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int const n = 20;
+  int ans = 1e9;
+  for(int x = 0; x < (1 << n); ++x) {
+    string s(n, 'a');
+    for(int i = 0; i < n; ++i) {
+      if(x&(1 << i)) s[n-1-i] = 'b';
+    }
+    int num_palindroms = 0;
+    for(int i = 0; i < n; ++i) {
+      for(int j = i; j < n; ++j) {
+        bool palindrom = true;
+        for(int k = 0; i+k < j-k and palindrom; ++k) {
+          if(s[i+k] != s[j-k]) 
+            palindrom = false;
+        }
+        if(palindrom) num_palindroms++;
+      }
+    }
+    if(num_palindroms < ans) {
+      ans = num_palindroms;
+      cout << s << " : " << ans << endl;
+    }
+  }
+}
+```
 
 ## [Problema G3. Pinball](https://jutge.org/problems/P94446_ca) <a name="G3"/>
 
