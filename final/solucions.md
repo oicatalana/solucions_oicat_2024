@@ -622,6 +622,32 @@ int main()  {
 
 ## [Problema Q4. Suma de cubs (2)](https://jutge.org/problems/P52098_ca) <a name="Q4"/>
 
+Si en el problema Q1 demanàvem quin és el primer nombre que és la suma de 8 cubs consecutius i que és divisible per 2024 (a part del 2024 mateix), en aquest problema demanem quants nombres hi ha que compleixen aquesta propietat (on el cub més petit va des de $1$ fins a $2024^{2024}$). És a dir, volem trobar per a quantes $n$ es compleix que 
+$$n^3 + (n+1)^3 + (n+2)^3 + (n+3)^3 + (n+4)^3 + (n+5)^3 + (n+6)^3 + (n+7)^3 \mod 2024 \equiv 0$$
+
+<details>
+  <summary><b>Codi (C++)</b></summary>
+
+```py
+valids = 0
+for i in range(1, 2025):
+  suma_cubs = 0
+  for j in range(8):
+    suma_cubs += (i + j)**3
+  if suma_cubs % 2024 == 0:
+    valids += 1
+
+total = 2024**2024 * valids // 2024
+
+suma_digits = 0
+while total:
+  suma_digits += total%10
+  total //= 10
+
+print("Suma dels digits: ", suma_digits)
+```
+</details>
+
 ## [Problema C6. Laberint](https://jutge.org/problems/P34055_ca) <a name="C6"/>
 
 ## [Problema C7. Collaret de perles (2)](https://jutge.org/problems/P89236_ca) <a name="C7"/>
