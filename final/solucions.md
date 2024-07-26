@@ -625,7 +625,14 @@ int main()  {
 Si en el problema Q1 demanàvem quin és el primer nombre que és la suma de 8 cubs consecutius i que és divisible per 2024 (a part del 2024 mateix), en aquest problema demanem quants nombres hi ha que compleixen aquesta propietat (on el cub més petit va des de $1$ fins a $2024^{2024}$). 
 
 És a dir, volem trobar per a quantes $n$ amb $1 \leq n \leq 2024^{2024}$ es compleix que 
-$$n^3 + (n+1)^3 + (n+2)^3 + (n+3)^3 + (n+4)^3 + (n+5)^3 + (n+6)^3 + (n+7)^3 \mod 2024 \equiv 0$$
+$$n^3 + (n+1)^3 + (n+2)^3 + (n+3)^3 + (n+4)^3 + (n+5)^3 + (n+6)^3 + (n+7)^3 \equiv 0  \mod 2024 $$
+
+Si desenvolupéssim aquesta expressió, obtindríem un polinomi en la variable $n$ (on el grau màxim és 3, de fet). Això és molt útil, ja que per qualsevol $k \geq 1$ tenim que
+$$(n + 2024)^k = \sum_{i = 0}^k \binom{k}{i} n^i 2024^{k-i} \equiv n^k \mod 2024$$
+
+Per tant, si sumem 2024 a $n$, el mòdul de l'expressió anterior no canvia, així que si l'expressió anterior és múltiple de 2024 per una certa $n$, també ho serà per $n + 2024$, $n + 2\cdot 2024$, $n + 3 \cdot 2024$, $\dots$.
+
+Així doncs, només hem de calcular quantes sumes de cubs són múltiples de 2024 per $n$ entre $1$ i $2024$, i multiplicar el resultat per $2024^{2024}/2024$. 
 
 <details>
   <summary><b>Codi (C++)</b></summary>
