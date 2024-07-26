@@ -466,7 +466,7 @@ int main() {
 
 En aquest problema ens donen les especificacions d'una màquina de pinball, amb la posició dels obstacles, i ens demanen que dibuixem el recorregut que segueix la pilota, tenint en compte que aquesta gira 90 graus cada cop que xoca amb un obstacle. La clau del problema era adonar-se que és impossible que la pilota entri en un cicle (sabríeu dir per què?), així que en tenim prou amb simular el seu moviment fins a que surti de la graella.
 
-La direcció actual de la pilota la podem guardar com un enter entre $0$ i $3$ (representant les 4 direccions cardinals), ja que llavors cada cop que es xoca augmentem la direcció en 1. Llavors els moviments els podem codificar a partir de dues llistes `dx = [0, 1, 0, -1]` i `dy = [-1, 0, 1, 0]`, de manera que si la direcció actual és `k`, la pilota es moura `dx[k]` caselles en l'eix horitzontal i `dy[k]` caselles en l'eix vertical.
+La direcció actual de la pilota la podem guardar com un enter entre $0$ i $3$ (representant les 4 direccions cardinals), ja que llavors cada cop que es xoca augmentem la direcció en 1. Aleshores, els moviments els podem codificar a partir de dues llistes `dx = [0, 1, 0, -1]` i `dy = [-1, 0, 1, 0]`, de manera que si la direcció actual és `k`, la pilota es moura `dx[k]` caselles en l'eix horitzontal i `dy[k]` caselles en l'eix vertical.
 
 <details>
   <summary><b>Codi (Python 3)</b></summary>
@@ -514,6 +514,111 @@ img.save('output.png')
 </details>
 
 ## [Problema C5. Quadradets](https://jutge.org/problems/P76718_ca) <a name="C5"/>
+
+En aquest problema tenim una quadrícula $n \times n$ (on la $n$ pot arribar fins a $10^9$) i $c \leq 10^5$ caselles marcades amb una creu. Volem saber el nombre de quadradets $2 \times 2$ que formen les creus, i el nombre de quadradets als quals els hi falta una creu per estar complets. No obstant, només considerem que un quadradet $2 \times 2$ és vàlid si no té cap altra creu en les 12 caselles que l'envolten.
+
+Donat que la $n$ és massa gran com per guardar-nos la graella explícitament, podem guardar-nos la posició de les creus com un mapa `map<pair<int,int>, int>` que a cada casella marcada li assigna un identificador. Això ens permet fer un DFS per trobar tots els components connexos de caselles marcades, i per cada component comprovem si és un quadradet o un quasi-quadradet.
+
+Per comprovar si un component és un quadradet $2 \times 2$, hem de veure que té mida 4 i que la diferència entre la màxima i la mínima $x$, i entre la màxima i mínima $y$ és com a molt $1$.
+
+Per comprovar si un component és un quasi-quadradet, hem de veure que té mida 3 i que compleix la condició de ser un quadradet. Ara bé, podria passar que un quasi-quadradet no ho fos perquè si es completés la casella que falta per ser un quadradet, aquesta seria adjacent a una altra casella marcada (tot i que ara mateix el quasi-quadradet no és adjacent a cap casella marcada). Per comprovar aquest cas, donat un quasi-quadradet hem de trobar la casella que li falta, i comprovar els seus 3 veïns que no són adjacents al quasi-quadradet.
+
+Al codi a continuació, trobem la casella que falta amb la fórmula `xmissing = sumx/3 + int(sumx%3 == 1)` (la idea és que si la $x$ més gran està repetida, la suma serà 2 mòdul 3, mentre que si és la $x$ petita la que està repetida, la suma serà 1 mòdul 3). Per comprovar els veïns no adjacents, utilitzem que són les 3 caselles oposades a les 3 caselles del quasi-quadradet. 
+
+<details>
+  <summary><b>Codi (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+using ii = pair<int,int>;
+
+vector<int> dx = {1, 1, 0, -1, -1, -1, 0, 1};
+vector<int> dy = {0, -1, -1, -1, 0, 1, 1, 1};
+
+int main()  {
+  int n, m;
+  while(cin >> n >> m) {
+    vector<ii> v(m);
+    map<ii, int> id;
+    for(int i = 0; i < m; ++i) {
+      cin >> v[i].first >> v[i].second;
+      id[v[i]] = i;
+    }
+    vector<bool> vist(m, false);
+    int quadrats = 0;
+    int quasi = 0;
+
+    function<void(int, vector<int>&)> dfs = [&](int i, vector<int>& comp) {
+      ii pos = v[i];
+      comp.push_back(i);
+      for(int j = 0; j < 8; ++j) {
+        ii newpos = pos;
+        newpos.first += dx[j];
+        newpos.second += dy[j];
+        if(id.count(newpos)) {
+          int newi = id[newpos];
+          if(not vist[newi]) {
+            vist[newi] = true;
+            dfs(newi, comp);
+          }
+        }
+      }
+    };
+
+    auto EsQuadrat = [&](vector<int> const& comp) {
+      int xmin = n;
+      int xmax = 1;
+      int ymin = n;
+      int ymax = 1;
+      for(int i : comp) {
+        xmin = min(xmin, v[i].first);
+        xmax = max(xmax, v[i].first);
+        ymin = min(ymin, v[i].second);
+        ymax = max(ymax, v[i].second);
+      }
+      return xmax <= xmin + 1 and ymax <= ymin + 1;
+    };
+
+    auto EsQuasiQuadrat = [&](vector<int> const& comp) {
+      if(not EsQuadrat(comp)) return false;
+      ll sumx = 0, sumy = 0;
+      for(int i : comp) {
+        sumx += v[i].first;
+        sumy += v[i].second;
+      }
+      int xmissing = sumx/3 + int(sumx%3 == 1);
+      int ymissing = sumy/3 + int(sumy%3 == 1);
+
+      vector<ii> oposats;
+      for(int i : comp) {
+        ii p = {xmissing + (xmissing-v[i].first), ymissing + (ymissing - v[i].second)};
+        oposats.push_back(p);
+      }
+      for(ii const& p : oposats) {
+        if(id.count(p)) return false;
+      }
+      return true;
+    };
+
+    for(int i = 0; i < m; ++i) {
+      if(not vist[i]) {
+        vector<int> comp;
+        vist[i] = true;
+        dfs(i, comp);
+        if(comp.size() == 4 and EsQuadrat(comp)) 
+          ++quadrats;
+        if(comp.size() == 3 and EsQuasiQuadrat(comp))
+          ++quasi;
+      }
+    }
+    cout << quadrats << " " << quasi << endl;
+  }
+}
+```
+</details>
 
 ## [Problema Q4. Suma de cubs (2)](https://jutge.org/problems/P52098_ca) <a name="Q4"/>
 
