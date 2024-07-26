@@ -377,6 +377,48 @@ int main() {
 
 ## [Problema C4. Més o menys?](https://jutge.org/problems/P17499_ca) <a name="C4"/>
 
+En aquest problema, dues persones estan jugant a un joc d'endevinar un nombre de $1$ fins a $n$. Per cada intent de la primera persona, la segona persona li diu si el nombre secret és més gran, més petit, o si l'ha endevinat exactament. Al final, ens demanen dir si la segona persona ha respost de manera coherent (és a dir, si existeix un nombre coherent amb totes les respostes), i en cas que n'hi hagi un de sol, dir quin és.
+
+Observem que, si la primera persona diu el nombre $x$ i la segona persona respon 'més', això elimina tots els nombres de $1$ fins a $x$ com a possibles solucions. Analogament, si la segona persona respon 'menys, això elimina tots els nombres de $x$ fins a $n$. Així doncs, ens podem guardar el nombre més petit i el nombre més gran que encara no s'han eliminat, i amb cada resposta 'més' fem `petit = max(petit, x+1)`, i amb cada resposta 'menys' fem `gran = min(gran, x-1)`. Al final, haurem de comprovar si `petit <= gran`.
+
+Per processar les respostes 'sí' (és a dir, quan el primer jugador ha endevinat el nombre), observem que respondre 'sí' a $x$ és equivalent a respondre 'més' a $x-1$ i 'menys' a $x+1$ a la vegada. Alternativament, podríem tenir una variable booleana que ens diu si hem respost que sí ja a algun nombre, i guardar-nos també la $x$ a la que hem respost que sí, per comprovar que les respostes següents siguin coherents.   
+
+<details>
+  <summary><b>Codi (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int n;
+  while(cin >> n) {
+    int minim = 1;
+    int maxim = n;
+    int x;
+    while(cin >> x and x != 0) {
+      string s;
+      cin >> s;
+      if(s == "mes")
+        minim = max(minim, x + 1);
+      else if(s == "menys")
+        maxim = min(maxim, x - 1);
+      else {
+        minim = max(minim, x);
+        maxim = min(maxim, x);
+      }
+    }
+    if(minim > maxim) 
+      cout << "trampa!" << endl;
+    else if(minim == maxim) 
+      cout << minim << endl;
+    else 
+      cout << "ok" << endl;
+  }
+}
+```
+</details>
+
 ## [Problema Q3. Pocs palíndroms](https://jutge.org/problems/P97623_ca) <a name="Q3"/>
 
 ## [Problema G3. Pinball](https://jutge.org/problems/P94446_ca) <a name="G3"/>
