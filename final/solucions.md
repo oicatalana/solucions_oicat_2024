@@ -252,7 +252,128 @@ int main() {
 
 ## [Problema G2. Vestits](https://jutge.org/problems/P15490_ca) <a name="G2"/>
 
+En aquest problema ens donen $n$ colors de faldilles i $m$ colors de samarretes i hem de dibuixar una graella amb totes les possibles combinacions de colors. Novament, la dificultat principal és la implementació.
+
+<details>
+  <summary><b>Codi (Python3)</b></summary>
+
+```py
+from PIL import Image, ImageDraw
+from easyinput import read
+
+# Dibuixa un rectangle:
+#    nw = cantonada superior esquerra
+#    se = cantonada inferior dreta
+def DibuixaRectangle(nw, se, color):
+  dib.polygon([nw, (nw[0], se[1]), se, (se[0], nw[1])], color)
+
+n = read(int)
+color_f = [read(str) for _ in range(n)]
+m = read(int)
+color_s = [read(str) for _ in range(m)]
+
+img = Image.new('RGB', (100*m, 150*n), 'Grey')
+dib = ImageDraw.Draw(img)
+
+for i in range(n):
+  for j in range(m):
+    x = 100*j
+    y = 150*i
+    dib.ellipse([(x + 35, y + 5), (x + 64, y + 34)], "AntiqueWhite")
+    DibuixaRectangle((x + 5, y + 40), (x + 94, y + 54), color_s[j])
+    DibuixaRectangle((x + 30, y + 55), (x + 69, y + 94), color_s[j])
+    dib.polygon([(x + 30, y + 100), (x + 69, y + 100), (x + 79, y + 144), (x + 20, y + 144)], color_f[i])
+
+img.save('output.png')
+```
+</details>
+
 ## [Problema Q2. Superprimers](https://jutge.org/problems/P99345_ca) <a name="Q2"/>
+
+En aquest problema ens demanen trobar el nombre més gran tal que qualsevol seqüència de dígits consecutius formi un nombre primer (suposem que l'1 és un nombre primer). Així doncs, el 137 seria un nombre vàlid, ja que totes les seqüències de dígits consecutius són nombres primers: '1', '3', '7', '13', '37', '137'.
+
+Hi ha diverses maneres de resoldre'l. Si suposem d'un principi que la resposta no és massa gran, podem iterar pels nombres de 1 fins a $10^5$ (o un nombre gran similar), i comprovar per cadascun si és una resposta vàlida. Observem que si tinguéssim un nombre vàlid de $n$ dígits, traient-li l'últim dígit n'obtindríem un de $n-1$ dígits que també és vàlid. Per tant, com que no en trobem cap de 5 dígits, sabem que no n'hi haurà cap amb més de 5 dígits tampoc.
+
+Una solució alternativa i més eficient consisteix en començar amb una llista amb tots els nombres vàlids de 1 dígit (1, 2, 3, 5 i 7), i anar construint iterativament els nombres vàlids de $n$ dígits a partir dels de $n-1$ dígits. Per fer-ho, podem iterar per totes les parelles de nombres vàlids de $n-1$ i de 1 dígit, i comprovar si el resultat de concatenar-los és primer.   
+
+<details>
+  <summary><b>Solució 1 (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+bool IsPrime(int x) {
+  for(int i = 2; i*i <= x; ++i) {
+    if(x%i == 0) return false;
+  }
+  return true;
+}
+
+bool IsSuperprime(int x) {
+  string s = to_string(x);
+  int k = s.size();
+  for(int i = 0; i < k; ++i) {
+    for(int j = i; j < k; ++j) {
+      if(not IsPrime(stoi(s.substr(i, j-i+1))))
+        return false;
+    }
+  }
+  return true;
+}
+
+int main() {
+  int N = 1e6;
+  for(int i = 1; i < N; ++i) {
+    if(IsSuperprime(i)) cout << i << endl;
+  }
+}
+```
+</details>
+
+<details>
+  <summary><b>Solució 2 (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+bool IsPrime(int x) {
+  for(int i = 2; i*i <= x; ++i) {
+    if(x%i == 0) return false;
+  }
+  return true;
+}
+
+int main() {
+  vector<int> v = {1, 2, 3, 5, 7};
+  set<int> superprimers;
+  queue<int> q;
+  for(int x : v) {
+    superprimers.insert(x);
+    q.push(x);
+  }
+  while(not q.empty()) {
+    int x = q.front();
+    q.pop();
+    for(int i : v) {
+      int y = 10*x + i;
+      string s = to_string(y);
+      reverse(s.begin(), s.end());
+      s.pop_back();
+      reverse(s.begin(), s.end());
+      if(IsPrime(y) and superprimers.count(stoi(s))) {
+        q.push(y);
+        superprimers.insert(y);
+      }
+    }
+  }
+  for(int x : superprimers) {
+    cout << x << endl;
+  }
+}
+```
+</details>
 
 ## [Problema C4. Més o menys?](https://jutge.org/problems/P17499_ca) <a name="C4"/>
 
