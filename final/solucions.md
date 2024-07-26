@@ -425,7 +425,7 @@ En aquest problema ens demanen trobar la paraula de longitud 20 amb les lletres 
 
 Donat que el nombre de paraules de longitud 20 que podem fer amb 2 lletres és $2^{20} \cong 10^6$, podem iterar per totes les possibilitats i per cadascuna comprovar quantes subparaules palindròmiques té. Depèn de com ho implementem, el programa pot trigar una mica, però hauria d'acabar en uns pocs segons (que seria massa lent per enviar-lo al Jutge, però que no és un problema si només l'hem d'executar localment).
 
-Per iterar per totes les paraules de longitud 20, podem utilitzar el següent truc. Observeu que hi ha una bijecció entre les paraules de longitud 20 amb les lletres 'a' i 'b' i els nombres de 20 dígits escrits en binari (per exemple, podem representar les 'a' com un '0' i les 'b' com un '1'). Així doncs, si iterem pels nombres des de $0$ fins a $2^{20} - 1$ (que són 20 '1's seguits en binari), i considerem que els '0' són 'a' i els '1' són 'b', estarem iterant per totes les paraules possibles de longitud 20. A més, estarem iterant en ordre lexicogràfic, cosa que ens ajuda perquè el problema ens demana donar la paraula lexicogràficament més petita (d'entre les que tenen el mateix nombre de subparaules).   
+Per iterar per totes les paraules de longitud 20, podem utilitzar el següent truc. Observeu que hi ha una bijecció entre les paraules de longitud 20 amb les lletres 'a' i 'b' i els nombres de 20 dígits escrits en binari (per exemple, podem representar les 'a' com un '0' i les 'b' com un '1'). Així doncs, si iterem pels nombres des de $0$ fins a $2^{20} - 1$ (que són 20 '1's seguits en binari), i considerem que els '0' són 'a' i els '1' són 'b', estarem iterant per totes les paraules possibles de longitud 20. A més, estarem iterant en ordre lexicogràfic, cosa que ens ajuda perquè el problema ens demana donar la paraula lexicogràficament més petita (d'entre les que tenen el mateix nombre de subparaules palindròmiques).   
 
 <details>
   <summary><b>Codi (C++)</b></summary>
@@ -462,6 +462,55 @@ int main() {
 ```
 
 ## [Problema G3. Pinball](https://jutge.org/problems/P94446_ca) <a name="G3"/>
+
+En aquest problema ens donen les especificacions d'una màquina de pinball, amb la posició dels obstacles, i ens demanen que dibuixem el recorregut que segueix la pilota, tenint en compte que aquesta gira 90 graus cada cop que xoca amb un obstacle. La clau del problema era adonar-se que és impossible que la pilota entri en un cicle (sabríeu dir per què?), així que en tenim prou amb simular el seu moviment fins a que surti de la graella.
+
+La direcció actual de la pilota la podem guardar com un enter entre $0$ i $3$ (representant les 4 direccions cardinals), ja que llavors cada cop que es xoca augmentem la direcció en 1. Llavors els moviments els podem codificar a partir de dues llistes `dx = [0, 1, 0, -1]` i `dy = [-1, 0, 1, 0]`, de manera que si la direcció actual és `k`, la pilota es moura `dx[k]` caselles en l'eix horitzontal i `dy[k]` caselles en l'eix vertical.
+
+<details>
+  <summary><b>Codi (Python 3)</b></summary>
+
+```py
+from easyinput import read
+from PIL import Image, ImageDraw
+
+# Dibuixa un rectangle:
+#    nw = cantonada superior esquerra
+#    se = cantonada inferior dreta
+def DrawRectangle(nw, se, color):
+    dib.polygon([nw, (nw[0], se[1]), se, (se[0], nw[1])], color)
+
+
+m, n = read(int,int)
+a = [read(str) for _ in range(n)]
+
+img = Image.new('RGB', (30*m, 30*n), 'Green')
+dib = ImageDraw.Draw(img)
+
+vist = [[False for _ in range(m)] for _ in range(n)]
+pos = [m//2, n-1]
+direccio = 0
+dy = [-1, 0, 1, 0]
+dx = [0, 1, 0, -1]
+while pos[0] >= 0 and pos[0] < m and pos[1] >= 0 and pos[1] < n:
+    vist[pos[1]][pos[0]] = True
+    if a[pos[1]][pos[0]] == 'X':
+        direccio = (direccio + 1) % 4
+    pos[0] += dx[direccio]
+    pos[1] += dy[direccio]
+
+for i in range(n):
+    for j in range(m):
+        col = 'Blue'
+        if vist[i][j]:
+            DrawRectangle((30*j, 30*i), (30*j + 29, 30*i + 29), 'Yellow')
+            col = 'Red'
+        if a[i][j] == 'X':
+            dib.ellipse([(30*j, 30*i), (30*j + 29, 30*i + 29)], col)
+
+img.save('output.png')
+```
+</details>
 
 ## [Problema C5. Quadradets](https://jutge.org/problems/P76718_ca) <a name="C5"/>
 
