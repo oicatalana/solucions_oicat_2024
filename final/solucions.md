@@ -726,7 +726,7 @@ Per resoldre els casos on hem d'enderrocar un nombre més gran d'obstacles, hem 
 
 Aleshores, el nombre de caselles bloquejades per les quals passem en un camí serà la suma dels costos dels arcs que el formen. Per tant, el problema es redueix a trobar el camí de mínim cost que surti de la graella.
 
-La manera estàndard de trobar camins de mínim cost és amb l'[algorisme de Dijkstra](https://cp-algorithms.com/graph/dijkstra.html), que et troba el mínim cost per arribar des d'un vèrtex fix a tota la resta de vèrtexos del graf. Aquest algorisme té una complexitat assimptòtica de $\mathcal{O}((n+m) \log n)$ ([aquí](https://cp-algorithms.com/graph/dijkstra_sparse.html) podeu trobar una implementació més eficient). Per aquest problema, aquesta solució ja és prou bona, i hauria d'entrar per temps.
+La manera estàndard de trobar camins de mínim cost és amb l'[algorisme de Dijkstra](https://cp-algorithms.com/graph/dijkstra.html), que et troba el mínim cost per arribar des d'un vèrtex fix a tota la resta de vèrtexos del graf. Aquest algorisme té una complexitat assimptòtica de $\mathcal{O}((v+e) \log v)$ ([aquí](https://cp-algorithms.com/graph/dijkstra_sparse.html) podeu trobar una implementació més eficient). Per aquest problema, aquesta solució ja és prou bona, i hauria d'entrar per temps.
 
 <details>
   <summary><b>Solució amb Dijkstra (C++)</b></summary>
