@@ -661,7 +661,7 @@ print("Suma dels digits: ", suma_digits)
 
 En aquest problema hem de dir quin és el mínim nombre d'obstacles que hem d'enderrocar per poder sortir d'un laberint (donat en forma de graella, amb certes caselles bloquejades).
 
-El problema té un subcas que compta el 60% dels punts i que consisteix en casos on ens garanteixen que la resposta és sempre 0 o 1. Per resoldre'l, fem un DFS (o BFS) des de la posició inicial i mirem si arribem a sortir de la graella. Si és així, la resposta és 0, mentre que si no podem sortir, haurem d'enderrocar mínim un obstacle, i ens garanteixen que llavors la resposta és 1.
+El problema té un subcas que compta el 60% dels punts i que consisteix en casos on ens garanteixen que la resposta és sempre 0 o 1. Per resoldre'l, fem un DFS (o BFS) des de la posició inicial i mirem si arribem a sortir de la graella. Si és així, la resposta és 0; mentre que si no podem sortir, haurem d'enderrocar com a mínim un obstacle, i la resposta serà 1.
 
 Tingueu en compte que el programa es pot passar del límit de temps si continueu la cerca un cop heu trobat una sortida del laberint, tot i que això no canviaria la complexitat assimptòtica (que és $\mathcal{O}(n + m)$, on $n$ i $m$ són el nombre de files i columnes de la graella).
 
