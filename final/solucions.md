@@ -622,7 +622,9 @@ int main()  {
 
 ## [Problema Q4. Suma de cubs (2)](https://jutge.org/problems/P52098_ca) <a name="Q4"/>
 
-Si en el problema Q1 demanàvem quin és el primer nombre que és la suma de 8 cubs consecutius i que és divisible per 2024 (a part del 2024 mateix), en aquest problema demanem quants nombres hi ha que compleixen aquesta propietat (on el cub més petit va des de $1$ fins a $2024^{2024}$). És a dir, volem trobar per a quantes $n$ es compleix que 
+Si en el problema Q1 demanàvem quin és el primer nombre que és la suma de 8 cubs consecutius i que és divisible per 2024 (a part del 2024 mateix), en aquest problema demanem quants nombres hi ha que compleixen aquesta propietat (on el cub més petit va des de $1$ fins a $2024^{2024}$). 
+
+És a dir, volem trobar per a quantes $n$ amb $1 \leq n \leq 2024^{2024}$ es compleix que 
 $$n^3 + (n+1)^3 + (n+2)^3 + (n+3)^3 + (n+4)^3 + (n+5)^3 + (n+6)^3 + (n+7)^3 \mod 2024 \equiv 0$$
 
 <details>
