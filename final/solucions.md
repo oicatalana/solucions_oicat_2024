@@ -220,7 +220,7 @@ img.save('output.png')
 
 ## [Problema C3. Collaret de perles (1)](https://jutge.org/problems/P38607_ca) <a name="C3"/>
 
-En aquest problema ens donen un collaret amb perles blanques i negres, i hem de comprovar si el collaret és vàlid (diem que un collaret és vàlid si no té 4 o més perles blanques seguides i no té 2 o més perles negres seguides). La dificultat principal del problema és comprovar que els extrems del collaret encaixin bé. Això es pot fer amb un bucle a part, o utilitzant mòduls en els índexos, tal i com es fa al codi a continuació. No obstant, si es fa d'aquesta última manera, s'ha d'anar en compte que el codi tracti bé els casos com `BBB`, que no té 4 perles blanques consecutives però sí que compleix que $a_i = a_{(i+1) \mod n} = a_{(i+2) \mod n} = a_{(i + 3) \mod n} = \'B\'$.
+En aquest problema ens donen un collaret amb perles blanques i negres, i hem de comprovar si el collaret és vàlid (diem que un collaret és vàlid si no té 4 o més perles blanques seguides i no té 2 o més perles negres seguides). La dificultat principal del problema és comprovar que els extrems del collaret encaixin bé. Això es pot fer amb un bucle a part, o utilitzant mòduls en els índexos, tal i com es fa al codi a continuació. No obstant, si es fa d'aquesta última manera, s'ha d'anar en compte que el codi tracti bé els casos com `BBB`, que no té 4 perles blanques consecutives però sí que compleix que `a[i] = a[(i+1)%n] = a[(i+2)%n] = a[(i+3)%n] = 'B'`.
 
 <details>
   <summary><b>Codi (C++)</b></summary>
