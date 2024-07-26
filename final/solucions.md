@@ -20,7 +20,7 @@
 
 ## [Problema C1. Localitat més llunyana](https://jutge.org/problems/P37104_ca) <a name="C1"></a>
 
-En aquest problema es donaven dues ciutats, amb la seva distància en milles o quilòmetres, i s'havia de dir quina de les dues era la més llunyana (suposant que una milla equival exactament a 1609 metres). Conceptualment, aquest problema era molt senzill, però alguns participants van tenir errors per manipular malament els nombres amb decimals. Per evitar-ho, la solució més senzilla consistia en passar totes les quantitats a metres. Així, les quantitats en quilòmetres s'havien de multiplicar per 1000 i les quantitats en milles s'havien de multiplicar per 1609, i no feia falta utilitzar nombres amb decimals en cap moment.  
+En aquest problema es donen dues ciutats, amb la seva distància en milles o quilòmetres, i s'ha de dir quina de les dues és la més llunyana (suposant que una milla equival exactament a 1609 metres). Conceptualment, aquest problema és molt senzill, però alguns participants van tenir errors per haver manipulat malament els nombres amb decimals. Per evitar-ho, la solució més senzilla consisteix en passar totes les quantitats a metres. Així, les quantitats en quilòmetres s'han de multiplicar per 1000 i les quantitats en milles s'han de multiplicar per 1609, i no fa falta utilitzar nombres amb decimals en cap moment.  
 
 <details>
   <summary><b>Codi (C++)</b></summary>
@@ -80,7 +80,7 @@ else:
 
 ## [Problema C2. Quadrilàters](https://jutge.org/problems/P67380_ca) <a name="C2"/>
 
-En aquest problema, donades les longituds de 4 segments, ens demanaven si podíem construir un quadrilàter amb ells. La clau del problema era adonar-se'n que es pot construir un quadrilàter si, i només si, el segment més llarg és més curt que la suma de la resta.
+En aquest problema, donades les longituds de 4 segments, ens demanen si podem construir un quadrilàter amb ells. La clau del problema és adonar-se'n que es pot construir un quadrilàter si, i només si, el segment més llarg és més curt que la suma de la resta.
 
 En el cas d'un triangle, la mateixa condició continua sent vàlida, i es coneix amb el nom de [desigualtat triangular](https://ca.wikipedia.org/wiki/Desigualtat_triangular). Així doncs, podrem construir un triangle amb costats $a \leq b \leq c$ sempre que es compleixi que $c < a + b$. 
 <details>
@@ -180,7 +180,7 @@ for n in range(100):
 
 ## [Problema G1. Llonganisses](https://jutge.org/problems/P55377_ca) <a name="G1"/>
 
-En aquest problema s'havia de crear una imatge representant una fusta de la qual pengen una sèrie de llonganisses de les mides donades. La única dificultat de la solució era implementar les instruccions donades sense equivocar-se.
+En aquest problema s'ha de crear una imatge representant una fusta de la qual pengen una sèrie de llonganisses de diferents mides. La única dificultat de la solució és implementar les instruccions donades sense equivocar-se.
 
 Recordeu que podeu trobar una xuleta pels problemes gràfics a [https://lliçons.jutge.org/python/grafics/pil.html](https://lliçons.jutge.org/python/grafics/pil.html), amb exemples d'ús de les funcions més habituals.
 
@@ -220,19 +220,33 @@ img.save('output.png')
 
 ## [Problema C3. Collaret de perles (1)](https://jutge.org/problems/P38607_ca) <a name="C3"/>
 
+En aquest problema ens donen un collaret amb perles blanques i negres, i hem de comprovar si el collaret és vàlid (diem que un collaret és vàlid si no té 4 o més perles blanques seguides i no té 2 o més perles negres seguides). La dificultat principal del problema és comprovar que els extrems del collaret encaixin bé. Això es pot fer amb un bucle a part, o utilitzant mòduls en els índexos, tal i com es fa al codi a continuació. No obstant, si es fa d'aquesta última manera, s'ha d'anar en compte que el codi tracti bé els casos com `BBB`, que no té 4 perles blanques consecutives però sí que compleix que $a_i = a_{(i+1) \mod n} = a_{(i+2) \mod n} = a_{(i + 3) \mod n} = \'B\'$.
+
 <details>
   <summary><b>Codi (C++)</b></summary>
   
 ```cpp
+#include<bits/stdc++.h>
+using namespace std;
 
-```
-</details>
-
-<details>
-  <summary><b>Codi (Python 3)</b></summary>
-
-```py
-
+int main() {
+  string s;
+  while(cin >> s) {
+    int n = s.size();
+    bool valid = true;
+    for(int i = 0; i < n; ++i) {
+      if(s[i] == 'N' and s[(i+1)%n] == 'N') {
+        valid = false;
+        break;
+      }
+      if(n >= 4 and s[i] == 'B' and s[(i+1)%n] == 'B' and s[(i+2)%n] == 'B' and s[(i+3)%n] == 'B') {
+        valid = false;
+        break;
+      }
+    }
+    cout << (valid ? "si" : "no") << endl;
+  }
+}
 ```
 </details>
 
