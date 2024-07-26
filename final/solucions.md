@@ -460,6 +460,7 @@ int main() {
   }
 }
 ```
+</details>
 
 ## [Problema G3. Pinball](https://jutge.org/problems/P94446_ca) <a name="G3"/>
 
