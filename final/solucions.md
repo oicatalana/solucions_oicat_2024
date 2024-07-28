@@ -632,7 +632,7 @@ Si desenvolupéssim aquesta expressió, obtindríem un polinomi en la variable $
 
 <p>$$(n + 2024)^k = \sum_{i = 0}^k \binom{k}{i} n^i \cdot 2024^{k-i} \equiv n^k \mod 2024$$</p>
 
-Per tant, si sumem 2024 a $n$, el mòdul de l'expressió anterior no canvia, així que si l'expressió anterior és múltiple de 2024 per una certa $n$, també ho serà per $n + 2024$, $n + 2\cdot 2024$, $n + 3 \cdot 2024$, i així successivament.
+Per tant, si sumem 2024 a $n$, el mòdul de la suma de cubs no canvia, així que si la suma de cubs és múltiple de 2024 per una certa $n$, també ho serà per $n + 2024$, $n + 2\cdot 2024$, $n + 3 \cdot 2024$, i així successivament.
 
 Així doncs, només hem de calcular quantes sumes de cubs són múltiples de 2024 per les $n$ entre $1$ i $2024$, i multiplicar el resultat per $2024^{2024}/2024$. 
 
