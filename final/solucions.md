@@ -632,7 +632,7 @@ Si desenvolupéssim aquesta expressió, obtindríem un polinomi en la variable $
 
 <p>$$(n + 2024)^k = \sum_{i = 0}^k \binom{k}{i} n^i \cdot 2024^{k-i} \equiv n^k \mod 2024$$</p>
 
-Per tant, si sumem 2024 a $n$, el mòdul de la suma de cubs no canvia, així que si la suma de cubs és múltiple de 2024 per una certa $n$, també ho serà per $n + 2024$, $n + 2\cdot 2024$, $n + 3 \cdot 2024$, i així successivament.
+Per tant, si sumem 2024 a $n$, el mòdul de la suma de cubs no canvia, així que si la suma de cubs és múltiple de 2024 per a una certa $n$, també ho serà per a $n + 2024$, $n + 2\cdot 2024$, $n + 3 \cdot 2024$, i així successivament.
 
 Així doncs, només hem de calcular quantes sumes de cubs són múltiples de 2024 per les $n$ entre $1$ i $2024$, i multiplicar el resultat per $2024^{2024}/2024$. 
 
@@ -855,9 +855,401 @@ int main() {
 ```
 </details>
 
-## [Problema C7. Collaret de perles (2)](ccc) <a name="C7"/>
+## [Problema C7. Collaret de perles (2)](https://jutge.org/problems/P89236_ca) <a name="C7"/>
+
+En aquest 
+
+<details>
+  <summary><b>Solució parcial 1 (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+string s;
+
+bool Valid() {
+  int n = s.size();
+  for(int i = 0; i < n; ++i) {
+    if(s[i] == 'N' and s[(i+1)%n] == 'N') 
+      return false;
+    if(n >= 4 and s[i] == 'B' and s[(i+1)%n] == 'B' and s[(i+2)%n] == 'B' and s[(i+3)%n] == 'B')
+      return false;
+  }
+  return true;
+}
+
+int Resol(int actual, int n) {
+  if(actual == n) {
+    if(Valid()) return 1;
+    return 0;
+  }
+  int resposta = 0;
+  s[actual] = 'B';
+  resposta += Resol(actual+1, n);
+  s[actual] = 'N';
+  resposta += Resol(actual+1, n);
+  return resposta;
+}
+
+int main() {
+  int n;
+  while(cin >> n) {
+    s = string(n, '?');
+    cout << Resol(0, n) << endl;
+  }
+}
+```
+</details>
+
+<details>
+  <summary><b>Solució parcial 2 (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+string s;
+
+bool Valid() {
+  int n = s.size();
+  if(s[0] == 'N' and s[n-1] == 'N')
+    return false; 
+  if(n < 4) return true;
+  for(int i = 0; i < 4; ++i) {
+    int j = n-1-i;
+    if(s[j] == 'B' and s[(j+1)%n] == 'B' and s[(j+2)%n] == 'B' and s[(j+3)%n] == 'B')
+      return false;
+  }
+  return true;
+}
+
+int Resol(int actual, int n) {
+  if(actual == n) {
+    if(Valid()) return 1;
+    return 0;
+  }
+  int resposta = 0;
+  if(actual < 3 or s[actual-1] == 'N' or s[actual-2] == 'N' or s[actual-3] == 'N') {
+    s[actual] = 'B';
+    resposta += Resol(actual+1, n);
+  }
+  if(actual == 0 or s[actual-1] == 'B') {
+    s[actual] = 'N';
+    resposta += Resol(actual+1, n);
+  }
+  return resposta;
+}
+
+int main() {
+  int n;
+  while(cin >> n) {
+    s = string(n, '?');
+    cout << Resol(0, n) << endl;
+  }
+}
+```
+</details>
+
+<details>
+  <summary><b>Solució parcial 3 (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+ 
+int const MOD = 1e8 + 7; 
+int const N = 1e5;
+vector<int> dp;
+
+int Resol(int n) {
+  int ans = 0;
+  for(int esq = 0; esq <= 3; ++esq) {
+    for(int dre = 0; dre <= 3; ++dre) {
+      if(esq + dre >= 4) continue;
+      if(esq + dre == 0) continue;
+      if(esq + dre >= n) continue;
+      ans += dp[n-esq-dre];
+    }
+  }
+  if(n <= 3) ans++; // tot B's
+  return ans%MOD;
+}
+
+int main(){
+  // dp[i] := nombre de paraules vàlides (sense comprovar que els 
+  //          extrems encaixin bé) de llargada 'i' que comencen i
+  //          acaben amb la lletra 'N'
+  dp = vector<int>(N, 0); 
+  dp[1] = 1;
+  dp[2] = 0;
+  dp[3] = 1;
+  dp[4] = 1;
+  int max_n = 4;
+
+  int n;
+  while(cin >> n) {
+    for(int i = max_n + 1; i <= n; ++i) {
+      dp[i] = (dp[i-2] + dp[i-3] + dp[i-4]) % MOD;
+    }
+    max_n = max(max_n, n);
+    cout << Resol(n) << endl;
+  } 
+}
+```
+</details>
+
+<details>
+  <summary><b>Solució completa (C++)</b></summary>
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+ 
+using ll = long long;
+int const MOD = 1e8 + 7; 
+int const N = 1e5;
+vector<vector<ll>> A;
+
+vector<ll> Producte(vector<vector<ll>> const& A, vector<ll> const& v) {
+  int r = A.size();
+  int c = A[0].size();
+  assert(int(v.size()) == c);
+  vector<ll> ans(r, 0);
+  for(int i = 0; i < r; ++i) {
+    for(int j = 0; j < c; ++j) {
+      ans[i] += (A[i][j] * v[j]) % MOD;
+    }
+    ans[i] %= MOD;
+  }
+  return ans;
+}
+
+vector<vector<ll>> Producte(vector<vector<ll>> const& A, vector<vector<ll>> const& B) {
+  int r = A.size();
+  int c = B[0].size();
+  int m = B.size();
+  vector<vector<ll>> ans(r, vector<ll>(c, 0));
+  for(int i = 0; i < r; ++i) {
+    for(int j = 0; j < c; ++j) {
+      for(int k = 0; k < m; ++k) {
+        ans[i][j] += (A[i][k] * B[k][j]) % MOD;
+      }
+      ans[i][j] %= MOD;
+    }
+  }
+  return ans;
+}
+
+vector<vector<ll>> Exp(vector<vector<ll>> const& A, ll k) {
+  int n = A.size();
+  vector<vector<ll>> ans(n, vector<ll>(n, 0));
+  if(k == 0) {
+    for(int i = 0; i < n; ++i)
+      ans[i][i] = 1;
+    return ans;
+  }
+  ans = Exp(A, k/2);
+  ans = Producte(ans, ans);
+  if(k&1) ans = Producte(ans, A);
+  return ans;
+}
+
+// Torna un vector amb {dp[n], dp[n-1], dp[n-2], dp[n-3]}.
+// Pre: n >= 4
+vector<ll> GetDP(ll n) {
+  vector<ll> v = {1, 1, 0, 1}; // {dp[4], dp[3], dp[2], dp[1]}
+  return Producte(Exp(A, n-4), v);
+}
+
+int Resol(ll n) {
+  if(n == 1) return 2;
+  if(n == 2) return 3;
+  if(n == 3) return 4;
+  vector<ll> dp = GetDP(n);
+  int ans = 0;
+  for(int esq = 0; esq <= 3; ++esq) {
+    for(int dre = max(1, esq); dre + esq < min(4ll, n); ++dre) {
+      if(esq == dre) ans += dp[esq+dre];
+      else ans += 2 * dp[esq+dre];
+    }
+  }
+  return ans%MOD;
+}
+
+int main(){
+  A = vector<vector<ll>>(4, vector<ll>(4, 0));
+  A[0][1] = A[0][2] = A[0][3] = A[1][0] = A[2][1] = A[3][2] = 1;
+
+  ll n;
+  while(cin >> n) {
+    cout << Resol(n) << endl;
+  } 
+}
+```
+</details>
 
 ## [Problema C8. Arbres Red-Black](https://jutge.org/problems/P13747_ca) <a name="C8"/>
 
+<details>
+  <summary><b>Codi (C++)</b></summary>
+
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+
+const int H = 6 + 1;
+const int PW = (1<<(H+1));
+
+
+using ll = long long;
+using VL = vector<ll>;
+using VVL = vector<VL>;
+using VI = vector<int>;
+
+
+const vector<char> car = { '.', 'R', 'B' };
+
+
+VVL R(H, VL(H));  // R[h][b] = arbres amb arrel R, d'alcada h, amb b negres als camins
+VVL AR(H, VL(H)); // acumulat per h
+VVL B(H, VL(H));  // B[h][b] = arbres amb arrel B, d'alcada h, amb b negres als camins
+VVL AB(H, VL(H)); // acumulat per h
+
+VI prof(PW); // profunditat dels nodes de l'arbre binari (guardat com un heap)
+
+VI qb(PW);  // nombre de bs amb que arribem a cada posicio del heap
+VI res(PW); // 0: fulla; 1: red; 2: black;
+
+
+int h;          // alcada objectiu
+ll num;         // numero que encara falta
+bool ok;        // indica si ja s'ha aconseguit alcada h
+int bmin, bmax; // rang per a les bs possibles
+
+
+ll quad(ll x) {
+  return x*x;
+}
+
+
+void calcula_profs(int pos, int p) {
+  if (pos >= PW) return;
+  prof[pos] = p;
+  calcula_profs(2*pos, p + 1);
+  calcula_profs(2*pos + 1, p + 1);
+}
+
+
+void calcula(int pos, int fill, int b, ll& bons, ll& sobren) {
+  if (pos == 0) return;
+
+  if (fill == 2*pos) { // venim del fill esquerra
+    if (res[pos] == 1) {
+      bons *= AB[h-prof[pos]][b-qb[pos]];
+      sobren *= AB[h-prof[pos]-1][b-qb[pos]];
+    }
+    else {
+      bons *= AR[h-prof[pos]][b-qb[pos]] + AB[h-prof[pos]][b-qb[pos]];
+      sobren *= AR[h-prof[pos]-1][b-qb[pos]] + AB[h-prof[pos]-1][b-qb[pos]];
+    }
+  }
+
+  calcula(pos/2, pos, b, bons, sobren);
+}
+
+
+void solu(int pos) {
+  if (prof[pos] > h) {
+    res[pos] = 0;
+    cout << car[0];
+    return;
+  }
+
+  int bs = qb[pos] = qb[pos/2];
+  if (bs == bmin) {
+    ll bons = 1;
+    ll sobren = 1;
+    calcula(pos/2, pos, bmin, bons, sobren);
+    if (not ok) bons -= sobren;
+
+    if (bons > num) {
+      res[pos] = 0;
+      cout << car[0];
+      bmax = bmin;
+      return;
+    }
+    num -= bons;
+  }
+
+  if (res[pos/2] == 2) {
+    ll quants = 0;
+    for (int b = bmin; b <= bmax; ++b) {
+      ll bons = AR[h-prof[pos]+1][b-bs];
+      ll sobren = AR[h-prof[pos]][b-bs];
+      calcula(pos/2, pos, b, bons, sobren);
+      if (not ok) bons -= sobren;
+      quants += bons;
+    }
+
+    if (quants > num) {
+      res[pos] = 1;
+      cout << car[1];
+      if (prof[pos] == h) ok = true;
+      bmax = min(bmax, bs + (h - prof[pos]));
+      solu(2*pos);
+      solu(2*pos + 1);
+      return;
+    }
+
+    num -= quants;
+  }
+
+  ++qb[pos];
+  res[pos] = 2;
+  cout << car[2];
+  if (prof[pos] == h) ok = true;
+  bmin = max(bmin, bs + 1);
+  solu(pos*2);
+  solu(pos*2 + 1);
+}
+
+
+int main() {
+  B[0][0] = AB[0][0] = 1;
+  R[1][0] = AR[1][0] = 1;
+  AB[1][0] = 1;
+  B[1][1] = AB[1][1] = 1;
+
+  for (h = 2; h < H; ++h) {
+    for (int b = 0; b <= h; ++b) {
+      R[h][b] = quad(AB[h-1][b]) - quad(AB[h-2][b]);
+      AR[h][b] = AR[h-1][b] + R[h][b];
+    }
+    for (int b = 0; b <= h; ++b) {
+      if (b) B[h][b] = quad(AR[h-1][b-1] + AB[h-1][b-1]) - quad(AR[h-2][b-1] + AB[h-2][b-1]);
+      AB[h][b] = AB[h-1][b] + B[h][b];
+    }
+  }
+
+  calcula_profs(1, 1);
+
+  qb[0] = 0;
+  res[0] = 2;
+
+  while (cin >> h >> num) {
+    --num;
+    ok = false;
+    bmin = h/2;
+    bmax = h;
+    solu(1);
+    cout << endl;
+    if (num != 0) cerr << "PIFIA!!! " << num << endl;
+  }
+}
+```
+</details>
 
 
