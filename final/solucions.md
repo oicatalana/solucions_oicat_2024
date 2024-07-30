@@ -1022,6 +1022,11 @@ Per resoldre l'últim cas, amb $n \leq 10^{12}$, utilitzem la següent optimitza
 La idea és que si ens escrivim els últims $k$ valors en un vector, podem calcular el vector següent multiplicant-lo per una matriu:
 <p>$$ \begin{pmatrix}f(n) \\ f(n-1) \\ \vdots \\ f(n-k+1) \end{pmatrix} = \begin{pmatrix} a_1 & a_2 & \dots & a_k \\ 1 & 0 & \dots & 0 \\ 0 & 1 & \dots & 0 \\ \vdots &&\ddots & \\ 0 & 0 & \dots & 1 \end{pmatrix} \cdot \begin{pmatrix}f(n-1) \\ f(n-2) \\ \vdots \\ f(n-k) \end{pmatrix} $$</p>
 
+Iterant aquest procediment, tenim que podem calcular $f(n)$ multiplicant els valors inicials per una certa potència de la matriu:
+<p>$$ \begin{pmatrix}f(n) \\ f(n-1) \\ \vdots \\ f(n-k+1) \end{pmatrix} = \begin{pmatrix} a_1 & a_2 & \dots & a_k \\ 1 & 0 & \dots & 0 \\ 0 & 1 & \dots & 0 \\ \vdots &&\ddots & \\ 0 & 0 & \dots & 1 \end{pmatrix}^{n-k} \cdot \begin{pmatrix}f(k) \\ f(k-1) \\ \vdots \\ f(1) \end{pmatrix} $$</p>
+
+La gràcia d'aquest mètode és que podem calcular la potència $n$-èssima d'una matriu $m \times m$ en cost $\mathcal{O}(m^3 \log n)$, utilitzant [exponenciació binària](https://cp-algorithms.com/algebra/binary-exp.html).
+
 <details>
   <summary><b>Solució completa (C++)</b></summary>
 
