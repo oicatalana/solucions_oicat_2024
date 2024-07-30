@@ -1019,8 +1019,8 @@ int main(){
 
 Per resoldre l'últim cas, amb $n \leq 10^{12}$, utilitzem la següent optimització, típica de les DPs "lineals" (és a dir, que satisfan una recurrència de l'estil $f(n) = a_1 \cdot f(n-1) + a_2 \cdot f(n-2) + \dots + a_k \cdot f(n-k)$ per un cert $k$ no gaire gran).
 
-La idea és que si ens escrivim els últims $k$ valors en un vector, podem calcular el següent multiplicant aquest vector per una matriu:
-<p>$$ \begin{pmatrix}f(n) & f(n-1) & \dots & f(n-k) \end{pmatrix} $$</p>
+La idea és que si ens escrivim els últims $k$ valors en un vector, podem calcular el vector següent multiplicant-lo per una matriu:
+<p>$$ \begin{pmatrix}f(n) \\ f(n-1) \\ \vdots \\ f(n-k+1) \end{pmatrix} = \begin{pmatrix} a_1 & a_2 & \dots & a_k \\ 1 & 0 & \dots & 0 \\ 0 & 1 & \dots & 0 \\ \vdots &&\ddots & \\ 0 & 0 & \dots & 1 \end{pmatrix} \cdot \begin{pmatrix}f(n-1) \\ f(n-2) \\ \vdots \\ f(n-k) \end{pmatrix} $$</p>
 
 <details>
   <summary><b>Solució completa (C++)</b></summary>
