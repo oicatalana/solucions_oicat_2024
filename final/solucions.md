@@ -908,9 +908,9 @@ int main() {
 ```
 </details>
 
-El codi anterior té complexitat $\mathcal{O}(n \cdot 2^n)$, ja que generem els $2^n$ possibles collarets i per cadascun comprovem si és vàlid. Per millorar-ho, cal adonar-se que la condició perquè un collaret sigui vàlid és una condició "local", en el sentit que si al començament del collaret hi tenim `BBBB` o `NN`, ja sabem que cap manera possible de completar el collaret serà vàlida. Així doncs, en el moment en què trobem un `BBBB` o `NN` podem parar de generar, estalviant-nos molts dels $2^n$ collarets possibles. Aquesta tècnica es coneix com a [backtracking](https://ca.wikipedia.org/wiki/Backtracking)).
+El codi anterior té complexitat $\mathcal{O}(n \cdot 2^n)$, ja que generem els $2^n$ possibles collarets i per cadascun comprovem si és vàlid. Per millorar-ho, cal adonar-se que la condició perquè un collaret sigui vàlid és una condició "local", en el sentit que si al començament del collaret hi tenim `BBBB` o `NN`, ja sabem que cap manera possible de completar el collaret serà vàlida. Així doncs, en el moment en què trobem un `BBBB` o `NN` podem parar de generar, estalviant-nos bona part dels $2^n$ collarets possibles. Aquesta tècnica es coneix com a [backtracking](https://ca.wikipedia.org/wiki/Backtracking)).
 
-En el codi a continuació implementem la idea anterior, i això ens permet passar els casos amb $n \leq 30$. A cada posició, abans de provar amb una `B` comprovem que el collaret no acabi ja amb `B`, i abans de posar una `N` comprovem que el collaret no acabi ja amb `NNN`. Així ens estalviem de continuar generant el collaret si sabem segur que aquest serà invàlid.
+En el codi a continuació implementem la idea anterior, i això ens permet passar els casos amb $n \leq 30$. A cada posició, abans de provar amb una `N` comprovem que el collaret no acabi ja amb `N`, i abans de posar una `B` comprovem que el collaret no acabi ja amb `BBB`. Així ens estalviem de continuar generant el collaret si sabem segur que aquest serà invàlid.
 
 <details>
   <summary><b>Solució parcial 2 (C++)</b></summary>
@@ -1118,6 +1118,10 @@ int main(){
 </details>
 
 ## [Problema C8. Arbres Red-Black](https://jutge.org/problems/P13747_ca) <a name="C8"/>
+
+Aquest era el problema més difícil de la competició. La idea és anar construint l'arbre en pre-ordre, calculant el nombre d'arbres que hi ha si hi posem un vèrtex buit, un vèrtex vermell o un vèrtex negre, i triant la opció que toca depenent de l'índex de l'arbre que volem aconseguir.
+
+Tot i que la idea és més o menys senzilla, la implementació està plena de detalls i no és gens fàcil quadrar-ho tot. Enhorabona si ho aconseguiu!
 
 <details>
   <summary><b>Codi (C++)</b></summary>
