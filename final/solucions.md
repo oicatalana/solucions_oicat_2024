@@ -857,7 +857,13 @@ int main() {
 
 ## [Problema C7. Collaret de perles (2)](https://jutge.org/problems/P89236_ca) <a name="C7"/>
 
-En aquest 
+En aquest problema ens donen un enter $n$ i ens demanen quants collarets de longitud $n$ hi ha que compleixin les condicions del problema C3.
+
+Hi havia tres subcasos amb puntuació parcial. Obteníem un 25% de la puntuació per resoldre els casos amb $n \leq 15$, un altre 25% per resoldre els casos amb $n \leq 30$, un 25% per resoldre els casos amb $n \leq 10^5$, i el 25% restant per resoldre casos amb $n \leq 10^{12}$.
+
+Per resoldre els casos amb $n \leq 15$, en tenim prou amb fer un programa que construeixi tots els collarets possibles i comprovi per cadascun si és vàlid. Per generar tots els collarets podem utilitzar el mateix truc que en el problema Q3, codificant cada collaret com una seqüència de $n$ zeros i uns que correspondrà a un nombre entre $0$ i $2^n - 1$. 
+
+Al codi següent ho fem d'una manera diferent, generant-los amb una funció recursiva. Tenim una variable global `s`, on ens guardem el collaret que estem construint, i una funció `Resol`, que rep la posició actual que hem d'omplir, la omple de les dues maneres possibles i crida la funció `Resol` per la següent posició per cada una d'elles.
 
 <details>
   <summary><b>Solució parcial 1 (C++)</b></summary>
@@ -901,6 +907,10 @@ int main() {
 }
 ```
 </details>
+
+El codi anterior té complexitat $\mathcal{O}(n \cdot 2^n)$, ja que generem els $2^n$ possibles collarets i per cadascun comprovem si és vàlid. Per millorar-ho, cal adonar-se que la condició perquè un collaret sigui vàlid és una condició "local", en el sentit que si al començament del collaret hi tenim `BBBB` o `NN`, ja sabem que cap manera possible de completar el collaret serà vàlida. Així doncs, en el moment en què trobem un `BBBB` o `NN` podem parar de generar, estalviant-nos molts dels $2^n$ collarets possibles. Aquesta tècnica es coneix com a [backtracking](https://ca.wikipedia.org/wiki/Backtracking)).
+
+En el codi a continuació implementem la idea anterior, i això ens permet passar els casos amb $n \leq 30$. A cada posició, abans de provar amb una `B` comprovem que el collaret no acabi ja amb `B`, i abans de posar una `N` comprovem que el collaret no acabi ja amb `NNN`. Així ens estalviem de continuar generant el collaret si sabem segur que aquest serà invàlid.
 
 <details>
   <summary><b>Solució parcial 2 (C++)</b></summary>
@@ -951,6 +961,14 @@ int main() {
 ```
 </details>
 
+Per resoldre els casos amb $n \leq 10^5$ necessitem canviar radicalment l'enfocament del problema, comptant el nombre de collarets sense necessàriament haver d'iterar per tots els collarets vàlids. Per fer-ho, utilitzem la tècnica coneguda com a [programació dinàmica](https://aprende.olimpiada-informatica.org/algoritmia-dinamica-1).
+
+La idea és que podem calcular el nombre de collarets de longitud $n$ a partir dels de longituds menors. La manera més clara de veure-ho és definir-se una funció $f(n)$ que ens diu el nombre de collarets vàlids de longitud $n$ <b>que acaben en `N`</b> i una funció $g(n)$ que ens diu el nombre de collarets vàlids de longitud $n$ <b>que acaben en `B`</b>.
+
+Aleshores, tenim que $f(n) = g(n-1)$ (ja que si volem posar una perla negra, la última ha de ser blanca) i $g(n) = f(n-1) + f(n-2) + f(n-3)$ (ja que si volem posar una blanca, tenim que el collaret pot acabar en `...N`, `...NB` o `...NBB`). Substituint la segona equació en la primera, obtenim que $f(n) = f(n-2) + f(n-3) + f(n-4)$. 
+
+Per assegurar-nos que els extrems del collaret encaixen sense generar cap seqüència `BBBB` o `NN`, a la funció `Resol()` iterem per tots els possibles començaments (`N...`, `BN...`, `BBN...`, `BBBN...`) i per tots els possibles acabaments (`...N`, `...NB`, `...NBB`, `...NBBB`) i comprovem si encaixen bé.  
+
 <details>
   <summary><b>Solució parcial 3 (C++)</b></summary>
 
@@ -998,6 +1016,11 @@ int main(){
 }
 ```
 </details>
+
+Per resoldre l'últim cas, amb $n \leq 10^{12}$, utilitzem la següent optimització, típica de les DPs "lineals" (és a dir, que satisfan una recurrència de l'estil $f(n) = a_1 \cdot f(n-1) + a_2 \cdot f(n-2) + \dots + a_k \cdot f(n-k)$ per un cert $k$ no gaire gran).
+
+La idea és que si ens escrivim els últims $k$ valors en un vector, podem calcular el següent multiplicant aquest vector per una matriu:
+<p>$$ \begin{pmatrix}f(n) & f(n-1) & \dots & f(n-k) \end{pmatrix} $$</p>
 
 <details>
   <summary><b>Solució completa (C++)</b></summary>
