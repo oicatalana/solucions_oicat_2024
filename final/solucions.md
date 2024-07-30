@@ -963,7 +963,7 @@ int main() {
 
 Per resoldre els casos amb $n \leq 10^5$ necessitem canviar radicalment l'enfocament del problema, comptant el nombre de collarets sense necessàriament haver d'iterar per tots els collarets vàlids. Per fer-ho, utilitzem la tècnica coneguda com a [programació dinàmica](https://aprende.olimpiada-informatica.org/algoritmia-dinamica-1).
 
-La idea és que podem calcular el nombre de collarets de longitud $n$ a partir dels de longituds menors. La manera més clara de veure-ho és definir-se una funció $f(n)$ que ens diu el nombre de collarets vàlids de longitud $n$ <b>que acaben en `N`</b> i una funció $g(n)$ que ens diu el nombre de collarets vàlids de longitud $n$ <b>que acaben en `B`</b>.
+La idea és que podem calcular el nombre de collarets de longitud $n$ a partir dels de longituds menors. La manera més clara de veure-ho és definir-se una funció $f(n)$ que ens diu el nombre de collarets vàlids de longitud $n$ <u>que acaben en `N`</u> i una funció $g(n)$ que ens diu el nombre de collarets vàlids de longitud $n$ <u>que acaben en `B`</u>.
 
 Aleshores, tenim que $f(n) = g(n-1)$ (ja que si volem posar una perla negra, la última ha de ser blanca) i $g(n) = f(n-1) + f(n-2) + f(n-3)$ (ja que si volem posar una blanca, tenim que el collaret pot acabar en `...N`, `...NB` o `...NBB`). Substituint la segona equació en la primera, obtenim que $f(n) = f(n-2) + f(n-3) + f(n-4)$. 
 
